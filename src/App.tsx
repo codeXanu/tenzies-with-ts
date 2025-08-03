@@ -2,12 +2,20 @@ import Die from "./Die"
 import React from "react"
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
+
+
+type Dice = {
+  value: number
+  isHeld: boolean
+  id: string
+}
+
 function App() {
 
-  const[dice, setDice] = React.useState(()=> generateAllNewDice())
+  const[dice, setDice] = React.useState<Dice[]>(():Dice[] => generateAllNewDice())
 
   console.log(dice)
-  const gameWon = dice.every(element=>(element.value===dice[0].value) && (element.isHeld===true) )
+  const gameWon: boolean = dice.every(element=>(element.value===dice[0].value) && (element.isHeld===true) )
   // to focus keyboard on "New Game" button so that just click "spacebar" and new game start
   const newGameRef = React.useRef(null)
   React.useEffect(()=>{
@@ -16,7 +24,7 @@ function App() {
     }
   }, [gameWon])
   
-  function generateAllNewDice() {
+  function generateAllNewDice(): Dice[] {
     return new Array(10)
         .fill(0)
         .map(() =>  ( {value: Math.ceil(Math.random() * 6), isHeld : false ,

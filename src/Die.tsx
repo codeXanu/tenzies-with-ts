@@ -1,6 +1,11 @@
-
-export default function(props) {
-    const styles = {backgroundColor: props.isHeld? "#59E391" : "white" }
+type DieProps = {
+    id: string
+    value: number
+    isHeld: boolean
+    hold: (id: string) => void
+}
+export default function Die(props: DieProps): React.JSX.Element {
+    const styles: {backgroundColor: string} = {backgroundColor: props.isHeld? "#59E391" : "white" }
     return(
         <button 
             onClick={()=> (props.hold(props.id))} 
