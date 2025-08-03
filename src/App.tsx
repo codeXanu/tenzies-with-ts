@@ -2,6 +2,7 @@ import Die from "./Die"
 import React from "react"
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
+import type { JSX } from 'react';
 
 
 type Dice = {
@@ -10,14 +11,14 @@ type Dice = {
   id: string
 }
 
-function App() {
+function App(): JSX.Element {
 
   const[dice, setDice] = React.useState<Dice[]>(():Dice[] => generateAllNewDice())
 
   console.log(dice)
   const gameWon: boolean = dice.every(element=>(element.value===dice[0].value) && (element.isHeld===true) )
   // to focus keyboard on "New Game" button so that just click "spacebar" and new game start
-  const newGameRef = React.useRef(null)
+  const newGameRef = React.useRef<HTMLButtonElement | null>(null)
   React.useEffect(()=>{
     if (gameWon && newGameRef.current) {
       newGameRef.current.focus();
@@ -27,18 +28,18 @@ function App() {
   function generateAllNewDice(): Dice[] {
     return new Array(10)
         .fill(0)
-        .map(() =>  ( {value: Math.ceil(Math.random() * 6), isHeld : false ,
+        .map((): Dice =>  ( {value: Math.ceil(Math.random() * 6), isHeld : false ,
             id : nanoid()
         }))
   }
  
-  function roll() {
+  function roll(): void {
     if (!gameWon) {
       setDice(
-        oldDice =>(
-          oldDice.map(element => element.isHeld ? element : 
+        (oldDice:Dice[]): Dice[] =>
+          oldDice.map((element: Dice): Dice => element.isHeld ? element : 
           {...element, value:Math.ceil(Math.random() * 6) })
-        )
+        
       )
     } else { 
       //for starting the new game
@@ -47,10 +48,10 @@ function App() {
     
   }
 
-  function hold(id: string){
+  function hold(id: string): void{
     setDice(
-      prevDice=>(
-        prevDice.map(ele =>
+      (prevDice: Dice[]): Dice[]=>(
+        prevDice.map((ele: Dice): Dice =>
           ele.id===id ? {...ele, isHeld:!ele.isHeld} : ele
         )
       )
@@ -58,7 +59,7 @@ function App() {
   }
   // console.log(numArray)
   
-  const diceNum = dice.map((dieObj)=>{
+  const diceNum: JSX.Element[] = dice.map((dieObj: Dice): JSX.Element =>{
     return <Die 
       key={dieObj.id} 
       value = {dieObj.value} 
